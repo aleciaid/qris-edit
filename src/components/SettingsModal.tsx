@@ -16,6 +16,13 @@ interface SettingsModalProps {
 
 const SETTINGS_KEY = 'qris-merger-settings';
 
+const DEFAULT_AREA_CONFIG: AreaConfig = {
+    x: 7.942652282055567,
+    y: 11.82706105215818,
+    width: 83.94940973589715,
+    height: 82.91270774948443,
+};
+
 function SettingsModal({ isOpen, onClose, savedSettings, onSave }: SettingsModalProps) {
     const [frameImage, setFrameImage] = useState<string | null>(null);
     const [areaConfig, setAreaConfig] = useState<AreaConfig | null>(null);
@@ -39,6 +46,9 @@ function SettingsModal({ isOpen, onClose, savedSettings, onSave }: SettingsModal
                 } catch {
                     // ignore
                 }
+            } else {
+                // Use default area config
+                setAreaConfig(DEFAULT_AREA_CONFIG);
             }
         }
         setSaveSuccess(false);
@@ -50,8 +60,8 @@ function SettingsModal({ isOpen, onClose, savedSettings, onSave }: SettingsModal
             const reader = new FileReader();
             reader.onload = (event) => {
                 setFrameImage(event.target?.result as string);
-                // Reset area when frame changes
-                setAreaConfig(null);
+                // Apply default area config when frame changes
+                setAreaConfig(DEFAULT_AREA_CONFIG);
                 setSaveSuccess(false);
             };
             reader.readAsDataURL(file);
@@ -290,4 +300,4 @@ function SettingsModal({ isOpen, onClose, savedSettings, onSave }: SettingsModal
 }
 
 export default SettingsModal;
-export { SETTINGS_KEY };
+export { SETTINGS_KEY, DEFAULT_AREA_CONFIG };
